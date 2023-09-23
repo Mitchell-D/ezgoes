@@ -40,11 +40,14 @@ their descriptions.
 
 ## minimal example
 
-This program will download the most recent band 13 radiances
-to the current directory.
+If the ezgoes module is in the current directory, this program will
+download the most recent band 13 radiances to the current directory.
 
-```
-from get_goes import GetGOES()
+```python
+from datetime import datetime
+from pathlib import Path
+from ezgoes import GetGOES, GOES_Product
+
 GG = GetGOES()
 GG.download(
         GG.search_closest_to_time(
@@ -63,6 +66,11 @@ GG.download(
 
 ## object types
 
+In case you're interested in using this module in your own code,
+`GetGOES`, `GOES_Product`, and `GOES_File` are the main 3 objects to
+familiarize yourself with. `TextFormat` is just a helper class for
+formatting the terminal text printing style.
+
 ### GetGOES
 
 The `GetGOES` object provides access to the GOES S3 bucket API,
@@ -73,6 +81,8 @@ enabling the user to:
  - Identify available files with `GetGOES.search_hour`,
    `GetGOES.search_range`, or `GetGOES.search_closest_to_time`.
  - Download single files with `GetGOES.download()`
+
+See the internal documentation for more details.
 
 ### GOES\_Product
 
@@ -100,7 +110,8 @@ bucket with product, stime, label, and path properties.
  - __product__: `GOES_Project` object describing this file's type.
  - __stime__: `datetime` object depicting the start time of this file,
    which is the fourth underscore-separated field in the file name.
- - __label__: Second underscore-separated field in the file name, which
-   specifies the sub-product type of the file. For example, ABI L2
-   band 13 brightness temperatures have label `ABI-L2-CMIPC-M6C13`.
+ - __label__: Second underscore-separated field in the file name,
+   which specifies the sub-product type of the file. For example, ABI
+   L2 band 13 brightness temperatures have label
+   `ABI-L2-CMIPC-M6C13`.
  - __path__: AWS bucket path to the provided file.

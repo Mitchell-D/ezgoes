@@ -3,8 +3,9 @@ from pathlib import Path
 from datetime import datetime
 from datetime import timedelta
 
-from TextFormat import TextFormat as TF
-from goes_info import goes_descriptions, goes_products, GOES_Product, GOES_File
+from .TextFormat import TextFormat as TF
+from .goes_info import GOES_Product, GOES_File
+from .goes_info import goes_descriptions, goes_products
 
 class GetGOES:
     """
@@ -421,3 +422,4 @@ if __name__=="__main__":
     assert data_dir.exists()
     for f in files:
         GG.download(f, data_dir, replace=False)
+
