@@ -25,14 +25,15 @@ to the comments inside.
 By default, this script will download the last 30 minutes of GOES-16
 ABI channel 13 data if you set the `data_dir` variable to an
 existing directory, but you can download any GOES product within a
-specified time range my modifiying the arguments to `search_goes`.
+specified time range by modifiying the arguments in the file.
+
+If you aren't sure which product you want, you can search for valid
+product labels by only providing a partial `GOES_Product` object. In
+the following example, the scan attribute is left out, so the method
+will return all valid L2 products for GOES ABI.
 
 ```python
-search_goes(GOES_Product(
-    satellite="18",
-    sensor="ABI",
-    level="L2",
-    ))
+search_goes(GOES_Product(satellite="18",sensor="ABI",level="L2"))
 ```
 
 Alternatively, if you want to use this module in your code, copy
