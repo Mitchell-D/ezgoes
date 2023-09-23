@@ -78,8 +78,8 @@ GG.download(
 In case you're interested in using this module in your own code,
 `GetGOES`, `GOES_Product`, and `GOES_File` are the main 3 objects to
 familiarize yourself with. `TextFormat` is just a helper class for
-formatting the terminal text printing style. with
-[ansi escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code).
+formatting the terminal text printing style (with
+[ansi escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code)).
 
 ### GetGOES
 
