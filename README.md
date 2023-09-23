@@ -71,7 +71,8 @@ GG.download(
 In case you're interested in using this module in your own code,
 `GetGOES`, `GOES_Product`, and `GOES_File` are the main 3 objects to
 familiarize yourself with. `TextFormat` is just a helper class for
-formatting the terminal text printing style.
+formatting the terminal text printing style. with
+[ansi escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code).
 
 ### GetGOES
 
@@ -82,7 +83,7 @@ enabling the user to:
    `GetGOES.search_products`
  - Identify available files with `GetGOES.search_hour`,
    `GetGOES.search_range`, or `GetGOES.search_closest_to_time`.
- - Download single files with `GetGOES.download()`
+ - Download single files with `GetGOES.download`
 
 See the internal documentation for more details.
 
@@ -94,7 +95,7 @@ scan properties.
 
  - __satellite__: GOES generation; one of ("16", "17", "18")
  - __sensor__: GOES satellite sensor; one of:
-   ('MAG', 'SEIS', 'SUVI', 'EXIS', 'GLM', 'ABI')
+   ("MAG", "SEIS", "SUVI", "EXIS", "GLM", "ABI")
  - __level__: Data processing level; one of ("L1b", "L2")
  - __scan__: Satellite scan or data type. Use `visual_search` or
   `GetGOES.search_products` to see options, or read the
@@ -106,14 +107,15 @@ By default, a `GOES_Product` object has its fields set to None.
 
 ### GOES\_File
 
-The `GOES_File` object identifies a specific file available on the
-bucket with product, stime, label, and path properties.
+The `GOES_File` is a namedtuple that identifies a specific file
+available on the bucket with its product, stime, label, and path
+properties.
 
- - __product__: `GOES_Project` object describing this file's type.
- - __stime__: `datetime` object depicting the start time of this file,
-   which is the fourth underscore-separated field in the file name.
+ - __product__: `GOES_Product` describing the file's product type.
+ - __stime__: `datetime` object depicting the start time of this
+   file, which is the fourth underscore-separated field in the name.
  - __label__: Second underscore-separated field in the file name,
-   which specifies the sub-product type of the file. For example, ABI
-   L2 band 13 brightness temperatures have label
+   which specifies the sub-product type of the file. For example,
+   ABI L2 band 13 brightness temperatures have the label
    `ABI-L2-CMIPC-M6C13`.
  - __path__: AWS bucket path to the provided file.
