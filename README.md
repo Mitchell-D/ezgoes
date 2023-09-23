@@ -18,16 +18,15 @@ You can install s3fs with pip, or with conda using conda-forge
 
 ## how to use
 
-In order to search for or download any GOES product, the only script
-you need to execute is `get_goes.py`. Please see the bottom of that
-file in the `__name__=="__main__"` section for detailed comments.
+If you just want to download some GOES data quickly, clone the
+repository, then modify the `test_goes_download.py` script according
+to the comments inside.
 
 By default, this script will download the last 30 minutes of GOES-16
 ABI channel 13 data if you set the `data_dir` variable to an
-existing directory.
+existing directory, but you can download any GOES product within a
+specified time range my modifiying the arguments to `search_goes`.
 
-You can narrow down valid options using the `search_goes()` method.
-For example, calling the method
 ```python
 search_goes(GOES_Product(
     satellite="18",
@@ -35,8 +34,11 @@ search_goes(GOES_Product(
     level="L2",
     ))
 ```
-will pretty-print all valid GOES-18 ABI L2 product labels along with
-their descriptions.
+
+Alternatively, if you want to use this module in your code, copy
+the _inner_ directory `ezgoes` (containing `__init__.py`) into the
+same directory as your code, then import the methods or objects you
+need in the same way `test_goes_download.py` does.
 
 ## minimal example
 
