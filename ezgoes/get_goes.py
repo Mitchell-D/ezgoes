@@ -11,13 +11,15 @@ class GetGOES:
     """
     Wrapper class on the NOAA AWS S3 bucket API for GOES. This class provides
     methods for searching the bucket for GOES satellite products, identifying
-    available files in a specified time range, and downloading them files.
+    available files in a specified time range, and downloading the files.
     """
     def __init__(self, refetch_api:bool=False):
         """
-        Initialize a GetGOES class by making a connection to the
+        Initialize a GetGOES class by making a connection to the S3 web API.
 
-        :@param refetch_api:
+        :@param refetch_api: If True, queries the S3 bucket for a set of
+            available products rather than assuming the configuration is
+            up-to-date. You can usually leave this to False.
         """
         self._s3 = None
         self._valid_satellites = {"16", "17", "18"}
@@ -38,7 +40,8 @@ class GetGOES:
     def s3(self):
         """
         Return the s3 api object as a property, and only fetch it once if
-        it is needed.
+        it is needed. This prevents re-connecting for each download, and
+        prevents unneccesary connection when the config is being used.
         """
         if self._s3 is None:
             self._s3 = s3fs.S3FileSystem(anon=True)
@@ -54,6 +57,8 @@ class GetGOES:
         valid options.
 
         :@param product_field: One of {"satellite", "sensor", "level", "scan"}
+        :@return: List of valid options if product_field is provided,
+            or the full dict of attributes and options by default.
         """
         if product_field is None:
             return self._valid
@@ -276,8 +281,8 @@ def describe(product:GOES_Product, do_print=False):
     return desc
 
 def search_goes(query:GOES_Product=None, time:datetime=None,
-                search_window:timedelta=None, goesapi:GetGOES=None,
-                label_substr:str=None):
+                search_window:timedelta=None, label_substr:str=None,
+                goesapi:GetGOES=None):
     """
     Pretty-prints product or file search results along with useful information.
     This method is meant to serve as a user interface to help narrow down
@@ -296,18 +301,23 @@ def search_goes(query:GOES_Product=None, time:datetime=None,
 
     :@param query: GOES_Product object, which is a namedtuple with string
         fields for satellite, sensor, level, and scan. If some of the fields
-        are set to None, a list of valid products will be returned. Otherwise
-        if all query fields are provided and valid, a list of avai
-    :@param goesapi: (Optional) existing GetGOES() instance. When a GetGOES()
-        object is initialized, it fetches valid product options by querying
-        the S3 bucket. Providing an existing object saves time since a new
-        get request doesn't need to be made.
+        are set to None, a list of valid products will be returned.
+        Otherwise, if all query fields are provided and valid, a list of
+        GOES_File objects available for download is returned.
     :@param time: If a full valid product is specified by the query, time
         parameter sets a search target time. If no search_window is provided,
         the function returns all files with a stime closest to provided time.
     :@param search_window: Timedelta object added to the 'time' parameter to
         describe a time range in which to return files. This may be negative
         to describe a window
+    :@param label_substr: Many bucket directories have a mixture of different
+        file types, for example they might specify a band in the second field
+        of the file name (ie "C13" for channel 13). Define this parameter to
+        narrow down search results to files only including the substring.
+    :@param goesapi: (Optional) existing GetGOES() instance. When a GetGOES()
+        object is initialized, it fetches valid product options by querying
+        the S3 bucket. Providing an existing object saves time since a new
+        get request doesn't need to be made.
     """
     goesapi = GetGOES() if goesapi is None else goesapi
     query = GOES_Product(None, None, None, None) if query is None else query
