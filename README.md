@@ -44,7 +44,8 @@ need in the same way `test_goes_download.py` does.
 ## minimal example
 
 If the ezgoes module is in the current directory, this program will
-download the most recent band 13 radiances to the current directory.
+download the most recent band 13 radiances over CONUS to the current
+directory.
 
 ```python
 from datetime import datetime
