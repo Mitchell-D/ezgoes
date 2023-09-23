@@ -7,13 +7,13 @@ available products and their descriptions.
 The printed product strings are dash-separated fields SENSOR-LEVEL-SCAN,
 most of which are available for all 3 satellites.
 """
-# search_goes()
+#search_goes()
 
 """
 You can provide a GOES_Product without all of its fields to search for
 product types that fit the constraints.
 """
-# search_goes(GOES_Product(satellite="16", sensor="ABI", level="L2"))
+#search_goes(GOES_Product(satellite="16", sensor="ABI", level="L2"))
 
 """
 Once you determine what product you want, specify a time range using a

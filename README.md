@@ -3,6 +3,11 @@
 Straightforward script for searching for and downloading GOES data
 from the NOAA S3 bucket on AWS.
 
+<p align="center">
+  <img width="200" src="https://github.com/Mitchell-D/ezgoes/blob/main/day-cloud-phase.png" />
+</p>
+
+
 ## dependency
 
 The only dependency that isn't default on most environment managers
