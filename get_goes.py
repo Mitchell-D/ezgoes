@@ -363,6 +363,22 @@ def search_goes(query:GOES_Product=None, time:datetime=None,
     return files
 
 if __name__=="__main__":
+    GG = GetGOES()
+    GG.download(
+            GG.search_closest_to_time(
+                product=GOES_Product(
+                    satellite="16",
+                    sensor="ABI",
+                    level="L1b",
+                    scan="RadC",
+                    ),
+                target_time=datetime.utcnow(),
+                label_substr="C13",
+                )[0],
+            data_dir=Path("./"),
+            )
+    exit(0)
+
     """
     Call the search_goes method with no arguments to print a list of
     available products and their descriptions.
@@ -394,10 +410,6 @@ if __name__=="__main__":
             search_window=timedelta(minutes=-30),
             label_substr="C13",
             )
-    for f in files:
-        print(f.label)
-    exit(0)
-
     """
     If you've specified the right range of files to download, provide a
     download location in data_dir and call the GetGOES class' download method

@@ -27,7 +27,39 @@ ABI channel 13 data if you set the `data_dir` variable to an
 existing directory.
 
 You can narrow down valid options using the `search_goes()` method.
-For example, calling `search_goes(GOES_)`
+For example, calling the method
+```python
+search_goes(GOES_Product(
+    satellite="18",
+    sensor="ABI",
+    level="L2",
+    ))
+```
+will pretty-print all valid GOES-18 ABI L2 product labels along with
+their descriptions.
+
+## minimal example
+
+This program will download the most recent band 13 radiances
+to the current directory.
+
+```
+from get_goes import GetGOES()
+GG = GetGOES()
+GG.download(
+        GG.search_closest_to_time(
+            product=GOES_Product(
+                satellite="16",
+                sensor="ABI",
+                level="L1b",
+                scan="RadC",
+                ),
+            target_time=datetime.utcnow(),
+            label_substr="C13",
+            )[0],
+        data_dir=Path("./"),
+        )
+```
 
 ## object types
 
@@ -48,11 +80,11 @@ The `GOES_Product` object is a namedtuple that identifies a specific
 bucket directory with a combination of satellite, sensor, level, and
 scan properties.
 
- - _satellite_: GOES generation; one of ("16", "17", "18")
- - _sensor_: GOES satellite sensor; one of:
+ - __satellite__: GOES generation; one of ("16", "17", "18")
+ - __sensor__: GOES satellite sensor; one of:
    ('MAG', 'SEIS', 'SUVI', 'EXIS', 'GLM', 'ABI')
- - _level_: Data processing level; one of ("L1b", "L2")
- - _scan_: Satellite scan or data type. Use `visual_search` or
+ - __level__: Data processing level; one of ("L1b", "L2")
+ - __scan__: Satellite scan or data type. Use `visual_search` or
   `GetGOES.search_products` to see options, or read the
   [NOAA bucket documentation][2]
 
@@ -65,10 +97,10 @@ By default, a `GOES_Product` object has its fields set to None.
 The `GOES_File` object identifies a specific file available on the
 bucket with product, stime, label, and path properties.
 
- - _product_: `GOES_Project` object describing this file's type.
- - _stime_: `datetime` object depicting the start time of this file,
+ - __product__: `GOES_Project` object describing this file's type.
+ - __stime__: `datetime` object depicting the start time of this file,
    which is the fourth underscore-separated field in the file name.
- - _label_: Second underscore-separated field in the file name, which
+ - __label__: Second underscore-separated field in the file name, which
    specifies the sub-product type of the file. For example, ABI L2
    band 13 brightness temperatures have label `ABI-L2-CMIPC-M6C13`.
- - _path_: AWS bucket path to the provided file.
+ - __path__: AWS bucket path to the provided file.
