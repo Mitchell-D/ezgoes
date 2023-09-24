@@ -27,7 +27,7 @@ scan: (many; use search_goes to find options)
 files = search_goes(
         # Specify a GOES_Product to search for
         query=GOES_Product("16", "ABI", "L2", "CMIPC"),
-        # Search for all files in the previous day
+        # Search for all files in the previous 30 minutes
         time=datetime.utcnow(),
         search_window=timedelta(minutes=-30),
         label_substr="C13",

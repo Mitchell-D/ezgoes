@@ -28,14 +28,15 @@ repository, then modify the `test_goes_download.py` script according
 to the comments inside.
 
 By default, this script will download the last 30 minutes of GOES-16
-ABI channel 13 data if you set the `data_dir` variable to an
-existing directory, but you can download any GOES product within a
-specified time range by modifiying the arguments in the file.
+L2 ABI channel 13 brightness temperatures if you set the `data_dir`
+variable to an existing directory, but you can download any GOES
+product within a specified time range by modifiying the arguments
+in the file.
 
 If you aren't sure which product you want, you can search for valid
 product labels by only providing a partial `GOES_Product` object. In
 the following example, the scan attribute is left out, so the method
-will return all valid L2 products for GOES ABI.
+will return all valid L2 products for GOES-18 (West) ABI.
 
 ```python
 search_goes(GOES_Product(satellite="18",sensor="ABI",level="L2"))
