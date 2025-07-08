@@ -192,7 +192,7 @@ class GetGOES:
         paths = []
         for path in self.s3.ls(s3_path):
             _,label,_,timestr,_,_ = Path(path).name.split("_")
-            if label_substr and label_substr not in label:
+            if label_substr and not all (l in label for l in label_substr):
                 continue
             paths.append(GOES_File(
                 product=product,
@@ -253,7 +253,8 @@ class GetGOES:
         files = self.search_range(product, start, end, label_substr)
         # If a label is provided, constrain files by substring
         if label_substr:
-            files = [f for f in files if label_substr in f.label]
+            files = [f for f in files
+                    if all(l in f.label for l in label_substr)]
         # Get a list of time differences and return the minimum
         diffs = [abs((f.stime-target_time).total_seconds()) for f in files]
         closest = [files[i] for i in range(len(files)) if diffs[i]==min(diffs)]
@@ -282,7 +283,7 @@ def describe(product:GOES_Product, do_print=False):
 
 def search_goes(query:GOES_Product=None, time:datetime=None,
                 search_window:timedelta=None, label_substr:str=None,
-                goesapi:GetGOES=None):
+                quiet_files=True, goesapi:GetGOES=None):
     """
     Pretty-prints product or file search results along with useful information.
     This method is meant to serve as a user interface to help narrow down
@@ -341,9 +342,10 @@ def search_goes(query:GOES_Product=None, time:datetime=None,
                     target_time=time,
                     label_substr=label_substr,
                     )
-            for f in files:
-                print(TF.YELLOW(f.stime.strftime("%Y%m%d %H:%M ")),
-                      Path(f.path).name)
+            if not quiet_files:
+                for f in files:
+                    print(TF.YELLOW(f.stime.strftime("%Y%m%d %H:%M ")),
+                          Path(f.path).name)
             if not files:
                 return []
             # All returned files will have the same start time
@@ -364,9 +366,10 @@ def search_goes(query:GOES_Product=None, time:datetime=None,
             if not files:
                 return []
             all_times = sorted(list(set([ f.stime for f in files])))
-            for f in files:
-                print(TF.YELLOW(f.stime.strftime("%Y%m%d %H:%M ")),
-                      Path(f.path).name)
+            if not quiet_files:
+                for f in files:
+                    print(TF.YELLOW(f.stime.strftime("%Y%m%d %H:%M ")),
+                          Path(f.path).name)
             print(TF.BLUE("\nFound data in time range ") +
                   TF.WHITE(f"[{all_times[0]}, {all_times[-1]}]"))
             print(TF.BLUE("With unique labels: "),
