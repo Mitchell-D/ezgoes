@@ -4,9 +4,11 @@ import numpy as np
 import argparse
 from pathlib import Path
 from datetime import datetime,timedelta
+import sys
+print(sys.path)
 
 from ezgoes import GetGOES,search_goes,GOES_Product,GOES_File
-from ezgoes.acquire import acquire_abi
+#from ezgoes.acquire import acquire_abi
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -71,7 +73,7 @@ def parse_args():
             dest="target_time",
             help="Target for observations to retrieve. Serves as the " + \
                     "'anchor' point for describing a range with the " + \
-                    "window_timedelta argument."
+                    "window_timedelta argument (YYYYmmddHHMM)."
             )
     parser.add_argument(
             "-w",
@@ -118,6 +120,7 @@ if __name__=="__main__":
     else:
         ttime = datetime.strptime(args.target_time, "%Y%m%d%H%M")
     #wtime = ttime + timedelta(hours=args.window_timedelta)
+    print(args.window_timedelta)
     gs = search_goes(
             query=GOES_Product(
                 satellite=None if args.goes_version=="-" \
@@ -143,4 +146,4 @@ if __name__=="__main__":
         resp = input(f"\nConfirm download {len(gs)} files (y/N): ")
         if resp.lower() != "y":
             exit(0)
-    acquire_abi(gs, Path("/rstor/mdodson/goes/abi"))
+    #acquire_abi(gs, Path("/rstor/mdodson/goes/abi"))
